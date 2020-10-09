@@ -1,0 +1,27 @@
+{
+  "name": "@cwi/parapet",
+  "version": "0.1.0",
+  "description": "Serverless Interactions with Bridgeport",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/p2ppsr/parapet.git"
+  },
+  "author": "Peer-to-peer Privacy Systems Research, LLC",
+  "license": "PROPRIETARY",
+  "bugs": {
+    "url": "https://github.com/p2ppsr/parapet/issues"
+  },
+  "homepage": "https://github.com/p2ppsr/parapet#readme",
+  "devDependencies": {
+    "standard": "^14.3.4"
+  },
+  "dependencies": {
+    "@cwi/boomerang": "^0.1.0",
+    "eventsource": "^1.0.7",
+    "node-fetch": "^2.6.1"
+  }
+}

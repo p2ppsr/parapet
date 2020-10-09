@@ -1,0 +1,17 @@
+{
+  "name": "@cwi/parapet-example",
+  "homepage": ".",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --watch .. index.js"
+  },
+  "dependencies": {
+    "@cwi/parapet": "file:..",
+    "event-stream": "^4.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "standard": "^14.3.4"
+  }
+}
