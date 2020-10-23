@@ -2,69 +2,92 @@ const boomerang = require('@cwi/boomerang')
 const EventSource = require('eventsource')
 const fetch = require('node-fetch')
 
-const knownURLs = {}
+const BHRP_BRIDGE_ID = '1TW5ogeDZyvq5q7tEjpNcBmJWsmQk7AeQ'
+
+const globalKnownURLs = {}
 
 module.exports = async ({
   bridge,
   request,
-  trustedBridgeHosts = ['121h7eKPgbFRTMdRpp8WpbaKjGLa978aqT'],
-  trustedBHRPEndpoint = 'https://bridgeport.babbage.systems/1TW5ogeDZyvq5q7tEjpNcBmJWsmQk7AeQ'
+  trustedHosts = ['121h7eKPgbFRTMdRpp8WpbaKjGLa978aqT'],
+  resolvers = [
+    'https://bridgeport.babbage.systems',
+    'https://bridgeport-failover.babbage.systems',
+    'https://bridgeport.gateway.cash',
+    'http://34.72.240.232'
+  ],
+  resolverCache = true
 }) => {
+  const knownURLs = resolverCache ? globalKnownURLs : {}
   if (!knownURLs[bridge]) {
-    const b64 = Buffer.from(JSON.stringify({
+    const resolverQuery = Buffer.from(JSON.stringify({
       v: 3,
       q: {
-        collection: 'advertisements',
+        collection: 'bridges',
         find: {
           bridge,
-          host: { $in: trustedBridgeHosts },
+          host: { $in: trustedHosts },
           revoked: false,
-          expiryTime: { $gt: '' + (Date.now() / 1000) + 10 }
+          expiryTime: { $gt: '' + parseInt(Date.now() / 1000) + 10 }
         },
-        limit: 1
+        limit: 4
       }
     })).toString('base64')
-    const hosts = await boomerang(
-      'GET',
-      `${trustedBHRPEndpoint}/q/${b64}`,
-      {},
-      { format: 'json' }
-    )
-    if (hosts[0]) {
-      knownURLs[bridge] = hosts[0].URL
+    for (let i = 0; i < resolvers.length && !knownURLs[bridge]; i++) {
+      try {
+        const hosts = await boomerang(
+          'GET',
+          `${resolvers[i]}/${BHRP_BRIDGE_ID}/q/${resolverQuery}`,
+          {},
+          { format: 'json' }
+        )
+        if (Array.isArray(hosts) && hosts[0]) {
+          knownURLs[bridge] = hosts
+        }
+      } catch (e) {}
     }
   }
   if (!knownURLs[bridge]) {
-    throw new Errror(
-      'None of your trusted bridge hosts currently maintains a copy of the bridge you are attempting to access! If you can\'t find hosting, reach out to support@babbage.systems and we\'d be glad to help.'
+    throw new Error(
+      'The bridge you are attempting to reach is not resolvable by any of the BHRP resolvers (either the ones you provided or the default resolvers). Either no one is hosting this bridge right now (the most likely case), or all of the BHRP resolvers are having errors. For help, you may contact bhrp-support@babbage.systems'
     )
   }
-  switch (request.type) {
-    case 'socket':
-      return new EventSource(`${knownURLs[bridge]}/${bridge}/s/${
-        Buffer.from(JSON.stringify(request.query)).toString('base64')
-      }`)
-    case 'streaming-query':
-      return fetch(
-        `${knownURLs[bridge]}/${bridge}/q/${
-          Buffer.from(JSON.stringify(request.query)).toString('base64')
-        }`
-      )
-    case 'json-query':
-      return boomerang(
-        'GET',
-        `${knownURLs[bridge]}/${bridge}/q/${
-          Buffer.from(JSON.stringify(request.query)).toString('base64')
-        }`,
-        {},
-        { format: 'json' }
-      )
-    case 'fetch':
-      return fetch(
-        `${knownURLs[bridge]}/${bridge}${request.path}`,
-        request.fetchConfig
-      )
-    default:
-      throw new Error(`Invalid request type: ${request.type}`)
+  for (let i = 0; i < knownURLs[bridge].length; i++) {
+    try {
+      const endpoint = `${knownURLs[bridge][i].URL}/${bridge}`
+      let result
+      switch (request.type) {
+        case 'socket':
+          result = new EventSource(
+            `${endpoint}/s/${Buffer.from(JSON.stringify(request.query))
+              .toString('base64')}`
+          )
+          return result
+        case 'streaming-query':
+          result = await fetch(
+            `${endpoint}/q/${Buffer.from(JSON.stringify(request.query))
+              .toString('base64')}`
+          )
+          return result
+        case 'json-query':
+          result = await boomerang(
+            'GET',
+            `${endpoint}/q/${Buffer.from(
+              JSON.stringify(request.query)
+            ).toString('base64')}`,
+            {},
+            { format: 'json' }
+          )
+          return result
+        case 'fetch':
+          result = await fetch(
+            `${endpoint}${request.path}`,
+            request.fetchConfig
+          )
+          return result
+        default:
+          throw new Error(`Invalid request type: ${request.type}`)
+      }
+    } catch (e) {}
   }
 }

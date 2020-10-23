@@ -14,8 +14,9 @@ Field               | Description
 --------------------|-------------------------
 bridge              | The Bridge ID Address for the bridge that you would like to interact with
 request             | The request that you would like to make from the bridge (more details below)
-trustedBridgeHosts  | An array of BHRP Host ID Addresses for BHRP Hosts that you trust (By default, contains the ID of the Babbage host)
-trustedBHRPEndpoint | The HTTPS URL of a BHRP server that you trust for resolving bridges to HTTPS hosts (By default, uses the BHRP bridge from Babbage)
+trustedBridgeHosts  | An array of BHRP Host ID Addresses for BHRP Hosts that you trust to serve good data (By default, contains the ID of the Babbage host)
+resolvers           | An array of Bridgeport server URLs you trust that host the BHRP resolver bridge (default: uses Babbage resolvers)
+resolverCache       | A boolean indicating whether BHRP host resolutions should be cached to avoid re-resolving the same bridge on subsequent calls (default: true)
 
 ### The Request Object
 
