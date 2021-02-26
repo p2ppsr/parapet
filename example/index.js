@@ -1,4 +1,4 @@
-const parapet = require('@cwi/parapet')
+const parapet = require('parapet-js')
 const es = require('event-stream')
 
 const init = async () => {

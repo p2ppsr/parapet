@@ -1,9 +1,9 @@
 const parapet = require('./index.js')
-const boomerang = require('@cwi/boomerang')
+const boomerang = require('boomerang-http')
 const EventSource = require('eventsource')
 const fetch = require('node-fetch')
 
-jest.mock('@cwi/boomerang')
+jest.mock('boomerang-http')
 jest.mock('node-fetch')
 jest.mock('eventsource')
 

@@ -1,5 +1,5 @@
 {
-  "name": "@cwi/parapet-example",
+  "name": "parapet-js-example",
   "homepage": ".",
   "version": "0.0.0",
   "private": true,
@@ -7,7 +7,7 @@
     "start": "nodemon --watch .. index.js"
   },
   "dependencies": {
-    "@cwi/parapet": "file:..",
+    "parapet-js": "file:..",
     "event-stream": "^4.0.1"
   },
   "devDependencies": {

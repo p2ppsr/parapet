@@ -1,4 +1,4 @@
-# @cwi/parapet
+# parapet-js
 
 Serverless Interactions with Bridgeport
 
@@ -98,7 +98,7 @@ For the path field, provide a path relative to the bridge root.
 This example demonstrates the four modes of Parapet operation:
 
 ```js
-const parapet = require('@cwi/parapet')
+const parapet = require('parapet-js')
 const es = require('event-stream')
 
 const init = async () => {
@@ -177,8 +177,6 @@ const init = async () => {
 init()
 ```
 
-## Confidentiality
+## License
 
-This is proprietary software developed and owned by Peer-to-peer Privacy Systems Research, LLC. 
-Except as provided for in your CWI Partner Agreement with us, you may not use this software and 
-must keep it confidential.
+The license for the code in this repository is the Open BSV License.

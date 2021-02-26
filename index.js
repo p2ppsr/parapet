@@ -1,4 +1,4 @@
-const boomerang = require('@cwi/boomerang')
+const boomerang = require('boomerang-http')
 const EventSource = require('eventsource')
 const fetch = require('node-fetch')
 
@@ -13,8 +13,7 @@ module.exports = async ({
   resolvers = [
     'https://bridgeport.babbage.systems',
     'https://bridgeport-failover.babbage.systems',
-    'https://bridgeport.gateway.cash',
-    'http://34.72.240.232'
+    'https://bridgeport.gateway.cash'
   ],
   resolverCache = true
 }) => {
