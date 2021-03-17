@@ -58,9 +58,7 @@ const init = async () => {
       query: {
         v: 3,
         q: {
-          collection: 'bridges',
-          find: {},
-          project: { host: 1, bridge: 1, URL: 1 }
+          find: {}
         }
       }
     }
