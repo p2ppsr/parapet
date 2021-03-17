@@ -8,14 +8,17 @@ const init = async () => {
     request: {
       type: 'streaming-query',
       query: {
+        v: 3,
         q: {
-          collection: 'advertisements',
+          collection: 'bridges',
           find: {},
-          project: { host: 1, bridge: 1, URL: 1, _id: 0 }
+          project: { host: 1, bridge: 1, URL: 1 },
+          limit: 3
         }
       }
     }
   })
+  console.log('streaming response:')
   result.body.pipe(es.split())
     .pipe(process.stdout)
 
@@ -25,16 +28,15 @@ const init = async () => {
     request: {
       type: 'json-query',
       query: {
+        v: 3,
         q: {
-          collection: 'advertisements',
-          find: {},
-          project: { host: 1, bridge: 1, URL: 1, _id: 0 }
+          collection: 'bridges',
+          find: {}
         }
       }
     }
   })
-  console.log()
-  console.log(result)
+  console.log('\n\njson-query response:\n', result)
 
   // Fetch
   result = await parapet({
@@ -45,9 +47,8 @@ const init = async () => {
       fetchConfig: {}
     }
   })
-  result.body.pipe(process.stdout)
-  // We'll wait before continuing to allow this to finish printing
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  result = await result.text()
+  console.log('Fetch result with length', result.length)
 
   // Socket
   result = await parapet({
@@ -55,10 +56,11 @@ const init = async () => {
     request: {
       type: 'socket',
       query: {
+        v: 3,
         q: {
-          collection: 'advertisements',
+          collection: 'bridges',
           find: {},
-          project: { host: 1, bridge: 1, URL: 1, _id: 0 }
+          project: { host: 1, bridge: 1, URL: 1 }
         }
       }
     }
@@ -68,6 +70,7 @@ const init = async () => {
     if (e.data) {
       const j = JSON.parse(e.data)
       if (j.type === 'open') {
+        console.log('Socket was opened, closing now.')
         result.close()
       }
     }

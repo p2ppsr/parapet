@@ -87,6 +87,8 @@ module.exports = async ({
         default:
           throw new Error(`Invalid request type: ${request.type}`)
       }
-    } catch (e) {}
+    } catch (e) {
+      continue
+    }
   }
 }

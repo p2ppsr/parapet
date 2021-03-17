@@ -7,8 +7,8 @@
     "start": "nodemon --watch .. index.js"
   },
   "dependencies": {
-    "parapet-js": "file:..",
-    "event-stream": "^4.0.1"
+    "event-stream": "^4.0.1",
+    "parapet-js": "file:.."
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
