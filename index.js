@@ -1,10 +1,18 @@
 const boomerang = require('boomerang-http')
-const EventSource = require('eventsource')
-const fetch = require('node-fetch')
 
 const BHRP_BRIDGE_ID = '1TW5ogeDZyvq5q7tEjpNcBmJWsmQk7AeQ'
-
 const globalKnownURLs = {}
+
+// The correct versions of EventSource and fetch should be used
+let fetch, EventSource
+if (typeof window !== 'undefined') {
+  fetch = typeof window.fetch !== 'undefined'
+    ? window.fetch
+    : require('node-fetch')
+  EventSource = typeof window.EventStream !== 'undefined'
+    ? window.EventSource
+    : require('eventsource')
+}
 
 module.exports = async ({
   bridge,
