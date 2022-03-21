@@ -12,6 +12,9 @@ if (typeof window !== 'undefined') {
   EventSource = typeof window.EventStream !== 'undefined'
     ? window.EventSource
     : require('eventsource')
+} else {
+  fetch = require('node-fetch')
+  EventSource = require('eventsource')
 }
 
 module.exports = async ({
