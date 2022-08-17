@@ -20,7 +20,10 @@ if (typeof window !== 'undefined') {
 module.exports = async ({
   bridge,
   request,
-  trustedHosts = ['121h7eKPgbFRTMdRpp8WpbaKjGLa978aqT'],
+  trustedHosts = [
+    '121h7eKPgbFRTMdRpp8WpbaKjGLa978aqT', // Babbage (mainnet)
+    '1PgzD5r2Et6o3kv8nQSYBsVxDZCD8M4Rrf' // Babbage (testnet)
+  ],
   resolvers = [
     'https://bridgeport.babbage.systems',
     'https://bridgeport-failover.babbage.systems',
