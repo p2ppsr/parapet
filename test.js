@@ -58,7 +58,12 @@ describe('parapet', () => {
       q: {
         collection: 'bridges',
         find: {
-          host: { $in: ['121h7eKPgbFRTMdRpp8WpbaKjGLa978aqT'] },
+          host: {
+            $in: [
+              '121h7eKPgbFRTMdRpp8WpbaKjGLa978aqT',
+              '1PgzD5r2Et6o3kv8nQSYBsVxDZCD8M4Rrf'
+            ]
+          },
           bridge: '12kZWuCjz9Q9mKieojXZVxGf2UMikcbW2h',
           revoked: false,
           expiryTime: { $gt: expect.any(String) }
@@ -106,9 +111,9 @@ describe('parapet', () => {
         throw new Error('failed')
       })
     await expect(parapet(validInput)).rejects.toThrow(new Error(
-      'The bridge you are attempting to reach is not resolvable by any of the BHRP resolvers (either the ones you provided or the default resolvers). Either no one is hosting this bridge right now (the most likely case), or all of the BHRP resolvers are having errors. For help, you may contact bhrp-support@babbage.systems'
+      `The bridge you are attempting to reach (${validInput.bridge}) is not resolvable by any of the BHRP resolvers (either the ones you provided or the default resolvers). Either no one is hosting this bridge right now (the most likely case), or all of the BHRP resolvers are having errors. For help, you may contact bhrp-support@babbage.systems`
     ))
-    expect(boomerang).toHaveBeenCalledTimes(4)
+    expect(boomerang).toHaveBeenCalledTimes(3)
   })
   describe('When resolving the available hosts succeeds', () => {
     beforeEach(() => {
