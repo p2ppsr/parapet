@@ -62,7 +62,7 @@ module.exports = async ({
   }
   if (!knownURLs[bridge]) {
     throw new Error(
-      'The bridge you are attempting to reach is not resolvable by any of the BHRP resolvers (either the ones you provided or the default resolvers). Either no one is hosting this bridge right now (the most likely case), or all of the BHRP resolvers are having errors. For help, you may contact bhrp-support@babbage.systems'
+      `The bridge you are attempting to reach (${bridge}) is not resolvable by any of the BHRP resolvers (either the ones you provided or the default resolvers). Either no one is hosting this bridge right now (the most likely case), or all of the BHRP resolvers are having errors. For help, you may contact bhrp-support@babbage.systems`
     )
   }
   for (let i = 0; i < knownURLs[bridge].length; i++) {

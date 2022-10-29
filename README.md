@@ -6,6 +6,13 @@ Serverless Interactions with Bridgeport
 
 Rather than having to interact with Bridgeport via HTTP directly, this tool allows you to specify the bridge that you'd like to use and how you'd like to interact. Since a bridge hosted by one node is identical to the same bridge hosted by any other node, you can eliminate a single point of failure in your application by providing a list of many Bridgehprt hosts that you trust, and the library will complete your request with one of the hosts you specified after first resolving the appropriate URL with BHRP.
 
+## Using Correct Resolvers
+
+When you use this tool, ensure that you are providing the correct Bridgeport resolvers for your environment. The defaults should be suitable for Minline (production), however there are different resolvers that should be used for Stageline (testnet) or Devline (local development).
+
+- **Stageline**: Use `["https://staging-bridgeport.babbage.systems"]` for the resolvers.
+- **Devline**: Use `["http://localhost:3103"]` for the resolvers.
+
 ## API
 
 Parapet exports a single function that takes an object as its first parameter. The object contains the following fields:
